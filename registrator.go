@@ -28,6 +28,7 @@ var deregister = flag.String("deregister", "always", "Deregister exited services
 var retryAttempts = flag.Int("retry-attempts", 0, "Max retry attempts to establish a connection with the backend. Use -1 for infinite retries")
 var retryInterval = flag.Int("retry-interval", 2000, "Interval (in millisecond) between retry-attempts.")
 var cleanup = flag.Bool("cleanup", false, "Remove dangling services")
+var hostname = flag.String("hostname", "", "Explicitly set hostname")
 
 func getopt(name, def string) string {
 	if env := os.Getenv(name); env != "" {
@@ -71,6 +72,10 @@ func main() {
 
 	if *hostIp != "" {
 		log.Println("Forcing host IP to", *hostIp)
+	}
+
+	if *hostname != "" {
+		bridge.Hostname = *hostname
 	}
 
 	if (*refreshTtl == 0 && *refreshInterval > 0) || (*refreshTtl > 0 && *refreshInterval == 0) {
